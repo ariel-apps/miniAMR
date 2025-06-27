@@ -5,7 +5,7 @@ CFLAGS = -O3
 LDFLAGS =
 LDLIBS = -lm
 
-EXEC = miniAMR.x
+EXEC = miniAMR-ref.x
 
 OBJS = block.o check_sum.o comm_block.o comm.o comm_parent.o comm_refine.o \
        comm_util.o driver.o init.o main.o move.o pack.o plot.o profile.o \
