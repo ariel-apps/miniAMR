@@ -29,6 +29,10 @@
 #include <string.h>
 #include <mpi.h>
 
+#ifdef USE_ARIELAPI
+#include <arielapi.h>
+#endif
+
 #define MA_MAIN
 #include "block.h"
 #include "comm.h"
@@ -43,10 +47,18 @@ int main(int argc, char** argv)
    //int provided;
 #include "param.h"
 
+#ifdef USE_ARIELAPI
+   ariel_enable();
+#endif
+
    ierr = MPI_Init(&argc, &argv);
    ierr = MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_ARE_FATAL);
    ierr = MPI_Comm_rank(MPI_COMM_WORLD, &my_pe);
    ierr = MPI_Comm_size(MPI_COMM_WORLD, &num_pes);
+
+#ifdef USE_ARIELAPI
+   ariel_disable();
+#endif
 
    t1 = timer();
    counter_malloc = 0;
@@ -352,7 +364,18 @@ int main(int argc, char** argv)
    }
 
    timer_main = timer() - t1;
+
+#ifdef USE_ARIELAPI
+   ariel_enable();
+   ariel_output_stats();
+#endif
+
    driver();
+
+#ifdef USE_ARIELAPI
+   ariel_output_stats();
+   ariel_disable();
+#endif
 
    profile();
 
@@ -364,7 +387,15 @@ int main(int argc, char** argv)
 
    MPI_Barrier(MPI_COMM_WORLD);
 
+#ifdef USE_ARIELAPI
+   ariel_enable();
+#endif
+
    MPI_Finalize();
+
+#ifdef USE_ARIELAPI
+   ariel_disable();
+#endif
 
    exit(0);
 }

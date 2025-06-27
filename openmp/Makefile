@@ -5,6 +5,13 @@ CFLAGS = -O3 -fopenmp
 LDFLAGS =
 LDLIBS = -lm -lgomp
 
+ENABLE_ARIELAPI ?= false
+ifeq ($(ENABLE_ARIELAPI), true)
+    CFLAGS += -DUSE_ARIELAPI
+    CPPFLAGS += -I$(SST_ELEMENTS_ROOT)/src/sst/elements/ariel/api
+	LDLIBS += -larielapi
+endif
+
 EXEC = miniAMR.x
 
 OBJS = block.o check_sum.o comm_block.o comm.o comm_parent.o comm_refine.o \
